@@ -1,0 +1,62 @@
+<div class="container-fluid todo-app">
+	<div class="row todo-app__row">
+		<div class="col-6 todo-app__column align-items-center mx-auto">
+			<div class="todo-app__content">
+				<h3 class="todo-app__title">To-Do App!</h3>
+				<div class="todo-app__label">Add New To-Do</div>
+				<div class="input-group todo-app__input-group mb-3">
+					<input 	type="text"
+							[(ngModel)]="newTodoText" 
+							(keyup.enter)="addTodo(todoStatus)"
+							class="form-control todo-app__input" 
+							placeholder="Enter new task">
+				</div>
+				<button type="button" 
+						class="btn btn-primary todo-app__button"
+						(click)="addTodo(todoStatus)">Add</button>
+			</div>
+		</div>
+		<div 	class="col-6 todo-app__column-dispay" 
+				*ngIf="todoStore.getRemaining().length > 0 || todoStore.getCompleted().length > 0"
+				@slideInOut>
+
+			<div class="todo-app__total">
+				<div class="col-4">
+					<span class="indicator todo-app__total-incomplete-indicator"></span>
+					<h6 class="todo-app__total-incomplete-number">{{todoStore.getRemaining().length}} Incomplete</h6>
+				</div>
+				<div class="col-4">
+					<span class="indicator todo-app__total-complete-indicator"></span>
+					<h6 class="todo-app__total-complete-number">{{todoStore.getCompleted().length}} Completed</h6>
+				</div>
+				<div class="col-4" *ngIf="todoStore.getCompleted().length > 0" @fade>
+					<!-- <span class="todo-app__total-complete-indicator"></span> -->
+					<h6 class="todo-app__remove-total-completed-item" (click)="removeCompleted(todoStatus)">Remove completed task</h6>
+				</div>
+			</div>
+
+			<div class="todo-app__todo-list">
+				<ul class="list-group list-group-flush todo-app__list-group" 
+					*ngFor="let todo of todoStore.todos"
+					@fade>
+					<li class="list-group-item todo-app__list-group-item d-flex justify-content-between align-items-center">
+							<div class="form-group todo-app__form-group">
+								<label 	class="custom-control custom-checkbox todo-app__list-label"
+										[class.todo-app__list-label-completed]="todo.completed">
+									<input 	type="checkbox" 
+											name="chbxTerms" 
+											class="custom-control-input todo-app__checkbox" 
+											(click)="toggleCompletion(todo, todoStatus)" 
+											[checked]="todo.completed">
+									<span class="custom-control-label" for="chbxTerms">{{todo.title}}</span>
+								</label>
+							</div>
+						<div rel="tooltip" title="Remove" class="todo-app__remove-btn" (click)="remove(todo, todoStatus)">X</div>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</div>
+
